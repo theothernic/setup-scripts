@@ -2,6 +2,9 @@
 
 #sudo apt-get install git; 
 
+# Install build-essential.
+sudo apt-get install build-essential;
+
 # Install node apt-get repos. Using the 4.x branch because
 # ver 5.x is not stable according to the developers.
 curl -sL https://deb.nodesource.com/setup_4.x | sudo bash; 
