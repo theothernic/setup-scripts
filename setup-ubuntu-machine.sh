@@ -16,8 +16,10 @@ sudo add-apt-repository -y ppa:nginx/stable;
 sudo apt-get update;
 
 sudo apt-get install -y nodejs;
-sudo apt-get -y install nginx;
+sudo apt-get install -y nginx;
 
-sudo apt-get install mariadb-server;
+sudo debconf-set-selections <<< 'mariadb-server mysql-server/root_password s3cr3t';
+sudo debconf-set-selections <<< 'mariadb-server mysql-server/root_password_again s3cr3t';
+sudo apt-get install -y mariadb-server;
 
 sudo apt-get install redis-server;
