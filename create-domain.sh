@@ -8,7 +8,7 @@ fi
 if [ $UID != "0" ]; then
 	echo "You must be root to run this script";
 	exit 1001;
-if 
+fi
 
 HTTP_GROUP="www-data" # centos=nobody,ubuntu/debian=www-data,arch=http
 BASE_APP_PATH="/srv";
