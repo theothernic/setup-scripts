@@ -17,5 +17,7 @@ DOMAIN=$1;
 echo "Creating space for ${DOMAIN} ...";
 DOMAIN_PATH="${BASE_APP_PATH}/${DOMAIN}";
 sudo mkdir -p ${DOMAIN_PATH};
+sudo mkdir -p ${DOMAIN_PATH}/public;
+sudo mkdir -p ${DOMAIN_PATH}/logs;
 sudo chgrp ${HTTP_GROUP} ${DOMAIN_PATH};
 sudo chmod 2775 ${BASE_APP_PATH}/${DOMAIN};
