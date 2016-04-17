@@ -5,7 +5,7 @@ if [ -z $1 ]; then
 	exit 1000;
 fi
 
-if [ $EUID -ne "0" ]; then
+if [ $UID != "0" ]; then
 	echo "You must be root to run this script";
 	exit 1001;
 if 
