@@ -10,7 +10,7 @@ sudo apt-get install -y mariadb-server;
 # sudo add-apt-repository -y ppa:nginx/stable;
 # sudo apt-get update && sudo apt-get install -y nginx
 
-sudo apt-get install -y apache2;
+sudo apt-get install -y apache2 libapache2-mod-php;
 
 curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -;
 sudo apt-get install -y nodejs;
