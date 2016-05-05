@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 
-sudo apt-get update && sudo apt-get upgrade;
+sudo apt-get update && sudo apt-get upgrade -y;
 sudo apt-get install -y build-essential;
 
 sudo apt-get install -y php7.0 php7.0-mysql php7.0-pgsql php7.0-gd php7.0-intl;
