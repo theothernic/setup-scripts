@@ -67,8 +67,14 @@ inst_install_php()
 	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_WEB_SERVER}
 }
 
+inst_restart_machine()
+{
+	sudo shutdown -r now;
+}
+
 
 ## EXECUTIONARY.
 inst_update_system
 inst_install_web_server
 inst_install_php
+inst_restart_machine
