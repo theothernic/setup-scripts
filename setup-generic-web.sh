@@ -8,27 +8,7 @@ else
 	exit 1000;
 fi
 
-INSTALL_WEB_SERVER="apache";
-INSTALL_DB_SERVER="mariadb";
-
-case ${ID} in
-	"ubuntu")
-	echo "setting up Ubuntu-specific commands";
-	setup_ubuntu;
-	;;
-
-	"redhat")
-	echo "setting up RH-specific commands";
-	setup_redhat;
-	;;
-esac
-
-if [ -z ${INSTALL_PKGMGR} ]; then
-	echo "Your distro is not currently supported.";
-	exit 1001;
-fi
-
-### FUNCTIONS.
+# SETUP SPECIFIC FUNCTIONALITY.
 setup_ubuntu()
 {
 	INSTALL_PKGMGR="apt-get";
@@ -59,6 +39,27 @@ setup_redhat()
 	INSTALL_PKGMGR="yum";
 }
 
+INSTALL_WEB_SERVER="apache";
+INSTALL_DB_SERVER="mariadb";
+
+case ${ID} in
+	"ubuntu")
+	echo "setting up Ubuntu-specific commands";
+	setup_ubuntu;
+	;;
+
+	"redhat")
+	echo "setting up RH-specific commands";
+	setup_redhat;
+	;;
+esac
+
+if [ -z ${INSTALL_PKGMGR} ]; then
+	echo "Your distro is not currently supported.";
+	exit 1001;
+fi
+
+### FUNCTIONS.
 
 inst_update_system()
 {
