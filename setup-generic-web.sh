@@ -4,6 +4,10 @@
 INSTALL_FLAG_PKG_PHP=true;
 INSTALL_FLAG_PKG_NODEJS=true;
 
+INSTALL_WEB_SERVER="apache";
+INSTALL_DB_SERVER="mariadb";
+
+Z_INSTALL_REQUIRE_RESTART=false;
 
 if [ -f /etc/os-release ]; then
 	source /etc/os-release;
@@ -29,14 +33,14 @@ setup_ubuntu()
 
 	# forcing the install of MariaDB, Oracle sucks (imho) and Percona is...weird.
 	if [ ${INSTALL_DB_SERVER} == "mysql" ] || [ ${INSTALL_DB_SERVER} == "mariadb" ]; then
-		INSTALL_PKG_DB_SREVER="mariadb-server";
+		INSTALL_PKG_DB_SERVER="mariadb-server";
 	fi
 
 	# things can differ between versions here.
 	# TODO: convert to a case statement because of numerous versions.
-	if [ ${VERSION_ID} == "14.04" ]; then
+	if [ "${VERSION_ID}" == "14.04" ]; then
 		INSTALL_PKG_PHP="php5-fpm php5-cli php5-gd php5-mysql php5-pgsql php5-intl";
-	elif [ ${VERSION_ID} == "16.04" ]; then
+	elif [ "${VERSION_ID}" == "16.04" ]; then
 		INSTALL_PKG_PHP="php7.0-fpm php7.0-cli php7.0-gd php7.0-mysql php7.0-pgsql php7.0-intl";
 	fi
 
@@ -53,11 +57,10 @@ setup_redhat()
 
 	INSTALL_PKG_BUILDTOOLS="gcc-c++ make";
 	INSTALL_PKG_NODEJS="nodejs";
-	INSTALL_PKD_NODEJS_URL="https://rpm.nodesource.com/setup_6.x";
-}
+	INSTALL_PKG_NODEJS_URL="https://rpm.nodesource.com/setup_6.x";
 
-INSTALL_WEB_SERVER="apache";
-INSTALL_DB_SERVER="mariadb";
+	Z_INSTALL_SETUP_READY=true;
+}
 
 case ${ID} in
 	"ubuntu")
@@ -81,7 +84,7 @@ fi
 inst_update_system()
 {
 	# if this system is debian-based, make sure that apt has the latest mirrors.
-	if [ ${ID} == "ubuntu" ]; then
+	if [ "${ID}" == "ubuntu" ]; then
 		sudo ${INSTALL_PKGMGR} update;
 	fi
 }
@@ -93,12 +96,12 @@ inst_upgrade_system()
 
 inst_build_tools()
 {
-	sudo ${INSTALL_PKGMGR} install {$INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_BUILDTOOLS};
+	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} "${INSTALL_PKG_BUILDTOOLS}";
 }
 
 inst_install_web_server()
 {
-	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_WEB_SERVER}
+	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} "${INSTALL_PKG_WEB_SERVER}";
 }
 
 inst_install_db_server()
@@ -108,18 +111,19 @@ inst_install_db_server()
 
 inst_install_php()
 {
-	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_WEB_SERVER}
+	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} "${INSTALL_PKG_PHP}";
 }
 
 inst_install_composer()
 {
-
+	echo "Installing composer is not available yet.";
+	true;
 }
 
-inst_install_npm()
+inst_install_nodejs()
 {
-	if [ ${ID} == "ubuntu" ]; then
-		curl -sL ${INSTALL_PKG_NODEJS_URL_UBUNTU} | sudo -E bash -;
+	if [ "${ID}" == "ubuntu" ]; then
+		curl -sL ${INSTALL_PKG_NODEJS_URL} | sudo -E bash -;
 		inst_update_system;
 	fi
 
@@ -144,6 +148,7 @@ inst_restart_machine()
 ## EXECUTIONARY.
 if [ ${Z_INSTALL_SETUP_READY} ]; then
 	inst_update_system;
+	inst_build_tools;
 	inst_install_db_server;
 	inst_install_web_server;
 
