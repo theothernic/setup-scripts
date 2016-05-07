@@ -14,6 +14,23 @@ INSTALL_DB_SERVER="mariadb";
 case ${ID} in
 	"ubuntu")
 	echo "setting up Ubuntu-specific commands";
+	setup_ubuntu;
+	;;
+
+	"redhat")
+	echo "setting up RH-specific commands";
+	setup_redhat;
+	;;
+esac
+
+if [ -z ${INSTALL_PKGMGR} ]; then
+	echo "Your distro is not currently supported.";
+	exit 1001;
+fi
+
+### FUNCTIONS.
+setup_ubuntu()
+{
 	INSTALL_PKGMGR="apt-get";
 	INSTALL_PKGMGR_FORCE_FLAG="-y";
 	
@@ -26,6 +43,8 @@ case ${ID} in
 		INSTALL_PKG_WEB_SERVER="apache2";
 	fi
 
+	if [ ${INSTALL_DB_SERVER} == "mysql" ]
+
 
 	# things can differ between versions here.
 	if [ ${VERSION_ID} == "14.04" ]; then
@@ -33,20 +52,14 @@ case ${ID} in
 	elif [ ${VERSION_ID} == "16.04" ]; then
 		INSTALL_PKG_PHP="php7.0-fpm php7.0-cli php7.0-gd php7.0-mysql php7.0-pgsql php7.0-intl";
 	fi
-	;;
+}
 
-	"redhat")
-	echo "setting up RH-specific commands";
+setup_redhat()
+{
 	INSTALL_PKGMGR="yum";
-	;;
-esac
+}
 
-if [ -z ${INSTALL_PKGMGR} ]; then
-	echo "Your distro is not currently supported.";
-	exit 1001;
-fi
 
-### FUNCTIONS.
 inst_update_system()
 {
 	# if this system is debian-based, make sure that apt has the latest mirrors.
@@ -60,6 +73,11 @@ inst_update_system()
 inst_install_web_server()
 {
 	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_WEB_SERVER}
+}
+
+inst_install_db_server()
+{
+	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_DB_SERVER}
 }
 
 inst_install_php()
@@ -77,4 +95,5 @@ inst_restart_machine()
 inst_update_system
 inst_install_web_server
 inst_install_php
+inst_install_db_server
 inst_restart_machine
