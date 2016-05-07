@@ -4,7 +4,7 @@
 INSTALL_FLAG_PKG_PHP=true;
 INSTALL_FLAG_PKG_NODEJS=true;
 
-INSTALL_WEB_SERVER="apache";
+INSTALL_WEB_SERVER="nginx";
 INSTALL_DB_SERVER="mariadb";
 
 
@@ -46,7 +46,6 @@ setup_ubuntu()
 	# things can differ between versions here.
 	# TODO: convert to a case statement because of numerous versions.
 	if [ "${VERSION_ID}" == "14.04" ]; then
-		
 
 		# apache has a module for php.
 		if [ ${INSTALL_WEB_SERVER} == "apache" ]; then
