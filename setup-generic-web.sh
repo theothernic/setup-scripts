@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
+### setup-generic-web.sh
+### written by Nicholas Barr, 2016-05-06.
+
 # INSTALL FLAGS.
 INSTALL_FLAG_PKG_PHP=true;
 INSTALL_FLAG_PKG_NODEJS=true;
@@ -139,8 +142,15 @@ inst_install_php()
 
 inst_install_composer()
 {
-	echo "Installing composer is not available yet.";
-	true;
+	if [ -f /usr/bin/php ]; then
+		sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";
+		sudo php composer-setup.php;
+		sudo rm -f composer-setup.php;
+
+		if [ -f composer.phar ]; then
+			sudo mv composer.phar /usr/local/bin/composer;
+		fi
+	fi
 }
 
 inst_install_nodejs()
