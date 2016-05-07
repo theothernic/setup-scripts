@@ -46,9 +46,26 @@ setup_ubuntu()
 	# things can differ between versions here.
 	# TODO: convert to a case statement because of numerous versions.
 	if [ "${VERSION_ID}" == "14.04" ]; then
-		INSTALL_PKG_PHP="php5-fpm php5-cli php5-gd php5-mysql php5-pgsql php5-intl";
+		
+
+		# apache has a module for php.
+		if [ ${INSTALL_WEB_SERVER} == "apache" ]; then
+			PHP_HANDLER="libapache2-mod-php";
+		else
+			PHP_HANDLER="php5-fpm";
+		fi
+
+		INSTALL_PKG_PHP="${PHP_HANDLER} php5-cli php5-gd php5-mysql php5-pgsql php5-intl";
 	elif [ "${VERSION_ID}" == "16.04" ]; then
-		INSTALL_PKG_PHP="php7.0-fpm php7.0-cli php7.0-gd php7.0-mysql php7.0-pgsql php7.0-intl";
+
+		# apache has a module for php.
+		if [ ${INSTALL_WEB_SERVER} == "apache" ]; then
+			PHP_HANDLER="libapache2-mod-php";
+		else
+			PHP_HANDLER="php7.0-fpm";
+		fi
+
+		INSTALL_PKG_PHP="${PHP_HANDLER} php7.0-cli php7.0-gd php7.0-mysql php7.0-pgsql php7.0-intl";
 	fi
 
 	INSTALL_PKG_BUILDTOOLS="build-essential";
