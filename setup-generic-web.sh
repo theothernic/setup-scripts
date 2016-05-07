@@ -1,5 +1,9 @@
 #! /usr/bin/env bash
 
+# INSTALL FLAGS.
+INSTALL_FLAG_PKG_PHP=true;
+INSTALL_FLAG_PKG_NODEJS=true;
+
 
 if [ -f /etc/os-release ]; then
 	source /etc/os-release;
@@ -29,11 +33,16 @@ setup_ubuntu()
 	fi
 
 	# things can differ between versions here.
+	# TODO: convert to a case statement because of numerous versions.
 	if [ ${VERSION_ID} == "14.04" ]; then
 		INSTALL_PKG_PHP="php5-fpm php5-cli php5-gd php5-mysql php5-pgsql php5-intl";
 	elif [ ${VERSION_ID} == "16.04" ]; then
 		INSTALL_PKG_PHP="php7.0-fpm php7.0-cli php7.0-gd php7.0-mysql php7.0-pgsql php7.0-intl";
 	fi
+
+	INSTALL_PKG_BUILDTOOLS="build-essential";
+	INSTALL_PKG_NODEJS="nodejs";
+	INSTALL_PKG_NODEJS_URL="https://deb.nodesource.com/setup_6.x";
 
 	Z_INSTALL_SETUP_READY=true;
 }
@@ -41,6 +50,10 @@ setup_ubuntu()
 setup_redhat()
 {
 	INSTALL_PKGMGR="yum";
+
+	INSTALL_PKG_BUILDTOOLS="gcc-c++ make";
+	INSTALL_PKG_NODEJS="nodejs";
+	INSTALL_PKD_NODEJS_URL="https://rpm.nodesource.com/setup_6.x";
 }
 
 INSTALL_WEB_SERVER="apache";
@@ -71,8 +84,16 @@ inst_update_system()
 	if [ ${ID} == "ubuntu" ]; then
 		sudo ${INSTALL_PKGMGR} update;
 	fi
-	
+}
+
+inst_upgrade_system()
+{
 	sudo ${INSTALL_PKGMGR} ${INSTALL_PKGMGR_FORCE_FLAG} upgrade;
+}
+
+inst_build_tools()
+{
+	sudo ${INSTALL_PKGMGR} install {$INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_BUILDTOOLS};
 }
 
 inst_install_web_server()
@@ -88,6 +109,21 @@ inst_install_db_server()
 inst_install_php()
 {
 	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_WEB_SERVER}
+}
+
+inst_install_composer()
+{
+
+}
+
+inst_install_npm()
+{
+	if [ ${ID} == "ubuntu" ]; then
+		curl -sL ${INSTALL_PKG_NODEJS_URL_UBUNTU} | sudo -E bash -;
+		inst_update_system;
+	fi
+
+	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_NODEJS};
 }
 
 # inst_extra_sources()
@@ -107,8 +143,19 @@ inst_restart_machine()
 
 ## EXECUTIONARY.
 if [ ${Z_INSTALL_SETUP_READY} ]; then
+	inst_update_system;
+	inst_install_db_server;
+	inst_install_web_server;
 
+	# these packages are toggled with flags at the beginning of the script.
+	if [ ${INSTALL_FLAG_PKG_NODEJS} ]; then
+		inst_install_nodejs;
+	fi
 
+	if [ ${INSTALL_FLAG_PKG_PHP} ]; then
+		inst_install_php;
+		inst_install_composer;
+	fi
 
 	if [ ${Z_INSTALL_REQUIRE_RESTART} ]; then
 		inst_restart_machine;
