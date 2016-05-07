@@ -108,7 +108,7 @@ if [ ! -z ${INSTALL_SETUP_COMPLETED} ]; then
 
 
 
-	if [ ${INSTALL_REQUIRE_RESTART} = true ]; then
+	if [ ! -z ${INSTALL_REQUIRE_RESTART} ]; then
 		inst_restart_machine;
 	fi
 else
