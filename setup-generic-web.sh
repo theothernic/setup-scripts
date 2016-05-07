@@ -7,6 +7,8 @@ INSTALL_FLAG_PKG_NODEJS=true;
 INSTALL_WEB_SERVER="apache";
 INSTALL_DB_SERVER="mariadb";
 
+
+Z_INSTALL_DB_ROOT_PASS="password";
 Z_INSTALL_REQUIRE_RESTART=false;
 
 if [ -f /etc/os-release ]; then
@@ -19,10 +21,13 @@ fi
 # SETUP SPECIFIC FUNCTIONALITY.
 setup_ubuntu()
 {
+	# exports first!
+	export DEBIAN_FRONTEND=noninteractive;
+
+	# set up apt as the package manager.
 	INSTALL_PKGMGR="apt-get";
 	INSTALL_PKGMGR_FORCE_FLAG="-y";
 	
-
 	# webserver choices.
 	if [ ${INSTALL_WEB_SERVER} == "nginx" ]; then
 		sudo add-apt-repository -y ppa:nginx/stable;
@@ -33,6 +38,8 @@ setup_ubuntu()
 
 	# forcing the install of MariaDB, Oracle sucks (imho) and Percona is...weird.
 	if [ ${INSTALL_DB_SERVER} == "mysql" ] || [ ${INSTALL_DB_SERVER} == "mariadb" ]; then
+		debconf-set-selections <<< "mariadb-server mysql-server/root_password password ${Z_INSTALL_DB_ROOT_PASS}";
+		debconf-set-selections <<< "mariadb-server mysql-server/root_password_again password ${Z_INSTALL_DB_ROOT_PASS}";
 		INSTALL_PKG_DB_SERVER="mariadb-server";
 	fi
 
