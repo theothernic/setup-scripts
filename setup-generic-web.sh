@@ -85,14 +85,14 @@ inst_install_php()
 	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_WEB_SERVER}
 }
 
-inst_extra_sources()
-{
-	if [ -d "./src" ]; then
-		for source_file in $(ls -l ./src); do
-			echo ${SOURCE_FILE};
-		done;
-	fi
-}
+# inst_extra_sources()
+# {
+# 	if [ -d "./src" ]; then
+# 		for source_file in $(ls -l ./src); do
+# 			echo ${SOURCE_FILE};
+# 		done;
+# 	fi
+# }
 
 inst_restart_machine()
 {
@@ -101,4 +101,10 @@ inst_restart_machine()
 
 
 ## EXECUTIONARY.
-inst_extra_sources
+if [ ${INSTALL_SETUP_READY} === true ]; then
+
+else
+	echo "Womp womp";
+fi
+
+
