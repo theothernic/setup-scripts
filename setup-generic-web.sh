@@ -58,7 +58,7 @@ setup_ubuntu()
 			PHP_HANDLER="php5-fpm";
 		fi
 
-		INSTALL_PKG_PHP="${PHP_HANDLER} php5-cli php5-gd php5-mysql php5-pgsql php5-intl php5-mcrypt";
+		INSTALL_PKG_PHP="${PHP_HANDLER} php5-cli php5-gd php5-mysql php5-pgsql php5-intl php5-mcrypt php5-curl";
 	elif [ "${VERSION_ID}" == "16.04" ]; then
 
 		# apache has a module for php.
@@ -131,6 +131,12 @@ inst_build_tools()
 inst_install_web_server()
 {
 	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} "${INSTALL_PKG_WEB_SERVER}";
+
+	# post-install.
+	if [ "${ID}" == "ubuntu" ]; then
+		sudo a2enmod rewrite;
+		sudo service apache2 restart;
+	fi
 }
 
 inst_install_db_server()
