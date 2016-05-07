@@ -104,7 +104,7 @@ inst_restart_machine()
 
 
 ## EXECUTIONARY.
-if [ ${INSTALL_SETUP_READY} = true ]; then
+if [! -z ${INSTALL_SETUP_COMPLETED} ]; then
 
 
 
