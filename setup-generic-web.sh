@@ -10,7 +10,7 @@ fi
 
 echo "OS ID: ${ID}";
 
-case "${ID}" in
+case ${ID} in
 	"ubuntu")
 	echo "setting up Ubuntu-specific commands";
 	INSTALL_PKGMGR="apt-get";
