@@ -6,6 +6,7 @@
 # INSTALL FLAGS.
 INSTALL_FLAG_PKG_PHP=true;
 INSTALL_FLAG_PKG_NODEJS=true;
+INSTALL_FLAG_PKG_GIT=true;
 
 INSTALL_WEB_SERVER="apache";
 INSTALL_DB_SERVER="mariadb";
@@ -69,6 +70,8 @@ setup_ubuntu()
 
 		INSTALL_PKG_PHP="${PHP_HANDLER} php7.0-cli php7.0-gd php7.0-mysql php7.0-pgsql php7.0-intl";
 	fi
+
+	INSTALL_PKG_GIT="git";
 
 	INSTALL_PKG_BUILDTOOLS="build-essential";
 	INSTALL_PKG_NODEJS="nodejs";
@@ -135,6 +138,11 @@ inst_install_db_server()
 	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} "${INSTALL_PKG_DB_SERVER}";
 }
 
+inst_install_git()
+{
+	sudo {$INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_GIT};
+}
+
 inst_install_php()
 {
 	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_PHP};
@@ -186,6 +194,10 @@ if [ ${Z_INSTALL_SETUP_READY} ]; then
 	inst_install_web_server;
 
 	# these packages are toggled with flags at the beginning of the script.
+	if [ ${INSTALL_FLAG_PKG_GIT} ]; then
+		inst_install_git;
+	fi
+
 	if [ ${INSTALL_FLAG_PKG_NODEJS} ]; then
 		inst_install_nodejs;
 	fi
