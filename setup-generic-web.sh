@@ -9,14 +9,14 @@ else
 fi
 
 
-case $id in
-	"ubuntu")
+case "$id" in
+	ubuntu)
 	echo "setting up Ubuntu-specific commands";
 	INSTALL_PKGMGR="apt-get";
 	INSTALL_PKGMGR_FORCE_FLAG="-y";
 	::
 
-	"redhat")
+	redhat)
 	echo "setting up RH-specific commands";
 	INSTALL_PKGMGR="yum";
 	::
