@@ -21,14 +21,15 @@ case ${ID} in
 	echo "setting up RH-specific commands";
 	INSTALL_PKGMGR="yum";
 	;;
-
-	*)
-	echo "Your distro is not yet supported.";
-	exit 1001;
 esac
 
+if [ -z ${INSTALL_PKGMGR} ]; then
+	echo "Your distro is not currently supported.";
+	exit 1001;
+fi
 
-install_system_update()
+### FUNCTIONS.
+inst_update_system()
 {
 	# if this system is debian-based, make sure that apt has the latest mirrors.
 	if [ $id -eq "ubuntu" ]; then
@@ -38,6 +39,5 @@ install_system_update()
 	sudo ${INSTALL_PKGMGR} ${INSTALL_PKGMGR_FORCE_FLAG} upgrade;
 }
 
-install_system_update();
-
-
+## EXECUTIONARY.
+inst_update_system();
