@@ -8,8 +8,9 @@ else
 	exit 1000;
 fi
 
+echo "OS ID: ${ID}";
 
-case "$id" in
+case "${ID}" in
 	ubuntu)
 	echo "setting up Ubuntu-specific commands";
 	INSTALL_PKGMGR="apt-get";
