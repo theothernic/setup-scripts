@@ -40,5 +40,5 @@ inst_update_system()
 }
 
 ## EXECUTIONARY.
-inst_update_system()
+inst_update_system
 
