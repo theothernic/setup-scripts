@@ -113,12 +113,12 @@ inst_install_web_server()
 
 inst_install_db_server()
 {
-	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} "${INSTALL_PKG_DB_SERVER}"
+	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} "${INSTALL_PKG_DB_SERVER}";
 }
 
 inst_install_php()
 {
-	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} "${INSTALL_PKG_PHP}";
+	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_PHP};
 }
 
 inst_install_composer()
