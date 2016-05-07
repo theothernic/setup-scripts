@@ -34,6 +34,8 @@ setup_ubuntu()
 	elif [ ${VERSION_ID} == "16.04" ]; then
 		INSTALL_PKG_PHP="php7.0-fpm php7.0-cli php7.0-gd php7.0-mysql php7.0-pgsql php7.0-intl";
 	fi
+
+	Z_INSTALL_SETUP_READY=true;
 }
 
 setup_redhat()
@@ -104,11 +106,11 @@ inst_restart_machine()
 
 
 ## EXECUTIONARY.
-if [ ! -z ${INSTALL_SETUP_COMPLETED} ]; then
+if [ ${Z_INSTALL_SETUP_READY} ]; then
 
 
 
-	if [ ! -z ${INSTALL_REQUIRE_RESTART} ]; then
+	if [ ${Z_INSTALL_REQUIRE_RESTART} ]; then
 		inst_restart_machine;
 	fi
 else
