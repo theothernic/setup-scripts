@@ -103,8 +103,13 @@ inst_restart_machine()
 ## EXECUTIONARY.
 if [ ${INSTALL_SETUP_READY} === true ]; then
 
+
+	if [ ${INSTALL_REQUIRE_RESTART} === true ]; then
+		inst_restart_machine;
+	fi
 else
-	echo "Womp womp";
+	echo "Script setup did not prepare correctly. Check to make sure that everything is working okay.";
+	exit 2001;
 fi
 
 
