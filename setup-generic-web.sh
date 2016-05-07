@@ -32,7 +32,7 @@ fi
 inst_update_system()
 {
 	# if this system is debian-based, make sure that apt has the latest mirrors.
-	if [ $id -eq "ubuntu" ]; then
+	if [ ${ID} == "ubuntu" ]; then
 		sudo ${INSTALL_PKGMGR} update;
 	fi
 	
