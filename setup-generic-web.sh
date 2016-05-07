@@ -23,8 +23,10 @@ setup_ubuntu()
 		INSTALL_PKG_WEB_SERVER="apache2";
 	fi
 
-	if [ ${INSTALL_DB_SERVER} == "mysql" ]
-
+	# forcing the install of MariaDB, Oracle sucks (imho) and Percona is...weird.
+	if [ ${INSTALL_DB_SERVER} == "mysql" ] || [ ${INSTALL_DB_SERVER} == "mariadb" ]; then
+		INSTALL_PKG_DB_SREVER="mariadb-server";
+	fi
 
 	# things can differ between versions here.
 	if [ ${VERSION_ID} == "14.04" ]; then
@@ -105,6 +107,7 @@ inst_restart_machine()
 if [ ${INSTALL_SETUP_READY} === true ]; then
 
 
+	
 	if [ ${INSTALL_REQUIRE_RESTART} === true ]; then
 		inst_restart_machine;
 	fi
