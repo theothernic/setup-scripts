@@ -85,6 +85,15 @@ inst_install_php()
 	sudo ${INSTALL_PKGMGR} install ${INSTALL_PKGMGR_FORCE_FLAG} ${INSTALL_PKG_WEB_SERVER}
 }
 
+inst_extra_sources()
+{
+	if [ -d "./src" ]; then
+		for source_file in $(ls -l ./src); do
+			echo ${SOURCE_FILE};
+		done;
+	fi
+}
+
 inst_restart_machine()
 {
 	sudo shutdown -r now;
@@ -92,8 +101,4 @@ inst_restart_machine()
 
 
 ## EXECUTIONARY.
-inst_update_system
-inst_install_web_server
-inst_install_php
-inst_install_db_server
-inst_restart_machine
+inst_extra_sources
