@@ -3,11 +3,21 @@
 ## BOOTSTRAP: STAGE 2
 
 ## FUNCTIONS
+function install_git() {
+  if [ ! command -v git ]; then
+    pacman -S git;
+  fi
+}
 function install_ansible() {
-  pacman -S ansible;
+  pacman -S --noconfirm ansible;
+}
+
+function install_bootctl() {
+  bootctl
 }
 
 ## EXEC
 echo "Starting bootstrap, stage 2"
 
 install_ansible;
+install_bootctl;

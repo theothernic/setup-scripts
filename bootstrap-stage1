@@ -43,7 +43,7 @@ function format_partitions() {
 
   # format storage partition.
   echo "Formatting the storage partition as ext4...";
-  mkfs.ext4 /dev/sda3;
+  mkfs.ext4 /dev/sda3 -L "archlinux";
 }
 
 function mount_partitions() {
