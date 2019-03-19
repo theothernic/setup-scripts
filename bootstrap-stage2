@@ -9,3 +9,5 @@ function install_ansible() {
 
 ## EXEC
 echo "Starting bootstrap, stage 2"
+
+install_ansible;
