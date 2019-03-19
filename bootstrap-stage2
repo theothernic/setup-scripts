@@ -2,22 +2,32 @@
 
 ## BOOTSTRAP: STAGE 2
 
+## VARS
+SCRIPT_ESP_PATH="/boot"
+
 ## FUNCTIONS
 function install_git() {
   if [ ! command -v git ]; then
     pacman -S git;
   fi
 }
+
 function install_ansible() {
   pacman -S --noconfirm ansible;
 }
 
 function install_bootctl() {
-  bootctl
+  bootctl --path=${SCRIPT_ESP_PATH} install
+  curl -sSL https://raw.githubusercontent.com/theothernic/setup-scripts/master/config-templates/loader-arch.conf >> "arch.conf";
+  curl -sSL https://raw.githubusercontent.com/theothernic/setup-scripts/master/config-templates/loader.conf >> "loader.conf"
+
+  cp loader.conf "${SCRIPT_ESP_PATH}/loader";
+  cp arch.conf "${SCRIPT_ESP_PATH}/loader/entries"
 }
 
 ## EXEC
 echo "Starting bootstrap, stage 2"
 
+install_git;
 install_ansible;
 install_bootctl;
