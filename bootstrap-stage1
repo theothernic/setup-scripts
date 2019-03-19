@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
+
+## VARS
+
 SCRIPT_DL_URL="https://www.archlinux.org/mirrorlist/?country=US";
 
 SETUP_LOCALE_LANG="en_US.UTF-8 UTF-8";
@@ -11,6 +14,12 @@ SETUP_STAGE2_FILE="bootstrap-stage2"
 SETUP_STAGE2_PREFIX="/mnt"
 SETUP_STAGE2_SRC="./${SETUP_STAGE2_FILE}"
 SETUP_STAGE2_DEST="/root/${SETUP_STAGE2_FILE}"
+
+## FUNCTIONS
+
+function install_dmidecode() {
+  pacman -S --noconfirm dmidecode;
+}
 
 function setup_lang() {
   # OS language settings.
@@ -94,6 +103,7 @@ function do_arch_chroot() {
   arch-chroot /mnt ${SETUP_STAGE2_DEST};
 }
 
+install_dmidecode
 setup_lang
 create_partitions
 format_partitions

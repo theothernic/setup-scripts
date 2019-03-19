@@ -8,7 +8,7 @@ SCRIPT_ESP_PATH="/boot"
 ## FUNCTIONS
 function install_git() {
   if [ ! command -v git ]; then
-    pacman -S git;
+    pacman -S --noconfirm git;
   fi
 }
 
@@ -26,12 +26,12 @@ function install_bootctl() {
 }
 
 function install_networkmanager() {
-  pacman -S --noconfirm NetworkManager;
+  pacman -S --noconfirm networkmanager;
   systemctl enable NetworkManager;
 }
 
 ## EXEC
-echo "Starting bootstrap, stage 2"
+#echo "Starting bootstrap, stage 2"
 
 install_git;
 install_ansible;
