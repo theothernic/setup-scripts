@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+## BOOTSTRAP: STAGE 2
+
+## FUNCTIONS
+function install_ansible() {
+  pacman -S ansible;
+}
+
+## EXEC
+echo "Starting bootstrap, stage 2"
