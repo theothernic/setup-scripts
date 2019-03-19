@@ -25,9 +25,15 @@ function install_bootctl() {
   cp arch.conf "${SCRIPT_ESP_PATH}/loader/entries"
 }
 
+function install_networkmanager() {
+  pacman -S --noconfirm NetworkManager;
+  systemctl enable NetworkManager;
+}
+
 ## EXEC
 echo "Starting bootstrap, stage 2"
 
 install_git;
 install_ansible;
 install_bootctl;
+install_networkmanager;
