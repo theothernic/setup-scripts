@@ -6,10 +6,11 @@ SETUP_LOCALE_LANG="en_US.UTF-8 UTF-8";
 SETUP_LOADKEYS="us"
 SETUP_DISP_FONT="lat9w-16"
 
-SETUP_STAGE2_URL=""
+SETUP_STAGE2_URL="https://raw.githubusercontent.com/theothernic/setup-scripts/master/bootstrap-stage2"
 SETUP_STAGE2_FILE="bootstrap-stage2"
+SETUP_STAGE2_PREFIX="/mnt"
 SETUP_STAGE2_SRC="./${SETUP_STAGE2_FILE}"
-SETUP_STAGE2_DEST="/mnt/tmp/${SETUP_STAGE2_FILE}"
+SETUP_STAGE2_DEST="/root/${SETUP_STAGE2_FILE}"
 
 function setup_lang() {
   # OS language settings.
@@ -83,12 +84,14 @@ function do_genfstab () {
 }
 
 function copy_stage2_to_tmp() {
-  curl -sSL ${SCRIPT_DL_URL} >> ${SETUP_STAGE2_SRC};
+  curl -sSL ${SETUP_STAGE2_URL} >> ${SETUP_STAGE2_SRC};
+  cp ${SETUP_STAGE2_SRC} ${SETUP_STAGE2_PREFIX}${SETUP_STAGE2_DEST};
+  chmod +x ${SETUP_STAGE2_PREFIX}${SETUP_STAGE2_DEST};
 }
 
 function do_arch_chroot() {
   # chroot
-  arch-chroot /mnt ${SETUP_STAGE2_SCRIPT};
+  arch-chroot /mnt ${SETUP_STAGE2_PREFIX}${SETUP_STAGE2_DEST};
 }
 
 setup_lang
@@ -101,4 +104,4 @@ install_arch_keyring
 do_pacstrap
 do_genfstab
 copy_stage2_to_tmp
-#do_arch_chroot
+do_arch_chroot
