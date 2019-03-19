@@ -1,0 +1,104 @@
+#! /usr/bin/env bash
+
+SCRIPT_DL_URL="https://www.archlinux.org/mirrorlist/?country=US";
+
+SETUP_LOCALE_LANG="en_US.UTF-8 UTF-8";
+SETUP_LOADKEYS="us"
+SETUP_DISP_FONT="lat9w-16"
+
+SETUP_STAGE2_URL=""
+SETUP_STAGE2_FILE="bootstrap-stage2"
+SETUP_STAGE2_SRC="./${SETUP_STAGE2_FILE}"
+SETUP_STAGE2_DEST="/mnt/tmp/${SETUP_STAGE2_FILE}"
+
+function setup_lang() {
+  # OS language settings.
+  echo "Setting up OS language settings (${SETUP_LANG})"
+  loadkeys ${SETUP_LOADKEYS};
+  setfont ${SETUP_DISP_FONT};
+  echo "${SETUP_LOCALE_LANG}" >> /etc/locale.gen;
+  locale-gen;
+  export LANG="${SETUP_LOCALE_LANG}";
+}
+
+function create_partitions() {
+  echo "Creating partitions";
+  parted -a optimal --script /dev/sda -- mklabel GPT;
+  parted -a optimal --script /dev/sda -- mkpart primary ext3 1M 513M;
+  parted -a optimal --script /dev/sda -- set 1 boot on;
+  parted -a optimal --script /dev/sda -- mkpart primary linux-swap 513M 2560M;
+  parted -a optimal --script /dev/sda -- mkpart primary ext4 2560M 100%;
+}
+
+function format_partitions() {
+  # format swap space and turn it on.
+  echo "Formatting swap space and activating it...";
+  mkswap /dev/sda2;
+  swapon /dev/sda2;
+
+  # format boot partition.
+  echo "Formatting the boot partition as FAT32...";
+  mkfs.fat -F32 /dev/sda1;
+
+  # format storage partition.
+  echo "Formatting the storage partition as ext4...";
+  mkfs.ext4 /dev/sda3;
+}
+
+function mount_partitions() {
+  # mount the storage partition.
+  echo "Mounting the storage partition as /mnt...";
+  mount /dev/sda3 /mnt;
+
+  # mount the boot partition.
+  echo "Mounting the boot partition as /mnt/boot";
+  mkdir -p /mnt/boot;
+  mount /dev/sda1 /mnt/boot;
+}
+
+function setup_pacman_mirrors() {
+  # get our copy of the mirrorlist.
+  echo "Downloading a copy of the custom mirrorlist...";
+  curl -sSL ${SCRIPT_DL_URL} >> mirrorlist.txt;
+  sed -i -e 's/#Server/Server/g' mirrorlist.txt;
+  mv mirrorlist.txt /etc/pacman.d/mirrorlist;
+  pacman -Sy;
+}
+
+function install_arch_keyring() {
+  pacman -S archlinux-keyring;
+  pacman-key --init;
+  pacman-key --populate archlinux;
+}
+
+function do_pacstrap() {
+  # pacstrap: install main system.
+  echo "Using pacstrap to install base and base-devel packages...";
+  pacstrap /mnt base base-devel;
+}
+
+function do_genfstab () {
+  # generate fstab;
+  genfstab -U -p /mnt >> /mnt/etc/fstab;
+}
+
+function copy_stage2_to_tmp() {
+  curl -sSL ${SCRIPT_DL_URL} >> ${SETUP_STAGE2_SRC};
+}
+
+function do_arch_chroot() {
+  # chroot
+  arch-chroot /mnt ${SETUP_STAGE2_SCRIPT};
+}
+
+setup_lang
+create_partitions
+format_partitions
+mount_partitions
+dl_pacman_mirrors
+update_pacman
+install_arch_keyring
+do_pacstrap
+do_genfstab
+copy_stage2_to_tmp
+#do_arch_chroot
